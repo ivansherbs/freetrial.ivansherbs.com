@@ -1,0 +1,145 @@
+<h1>@{title}</h1>
+<div class="row">
+	<div class="col-md-6">
+		<div class="content">
+
+			@{if query.paid === '0'}
+			<div class="contentwarning">
+				<i class="fa fa-warning"></i>@(We didn't receive a payment. <b>Try to pay again</b>.)
+			</div>
+			@{fi}
+
+			@{if query.paid === '1'}
+			<div class="contentsuccess">
+				<i class="fa fa-check-circle"></i>@(<b>Thank you</b>, order has been paid.)
+			</div>
+			@{fi}
+
+			@{if model.isfinished}
+			<div class="contentsuccess">
+				<i class="fa fa-check-circle"></i>@(Finished)
+			</div>
+			@{fi}
+
+			<div class="contentbody">
+				<div class="help nmb"><i class="fa fa-clock-o"></i>@(Order status:)</div>
+				<div class="b @{if model.status == 'Order received'}green@{fi}">@{model.status}</div>
+			</div>
+
+			@{if model.statushistory && model.statushistory.length > 1}
+				<div class="order-historystatus">
+				@{foreach m in model.statushistory.reverse()}
+					<div><i class="fa fa-clock-o"></i><b>@{m.date.format('@(yyyy-MM-dd HH:mm)')}</b> - @{m.status}</div>
+				@{end}
+				</div>
+			@{fi}
+
+			@{if model.message}
+			<div class="contentbody bg-yellow">
+				<div class="help mb10"><i class="fa fa-warning"></i>@(Message for you:)</div>
+				<div class="b">@{model.message.replace(/\n/g, '<br />')}</div>
+			</div>
+			@{fi}
+
+			<hr class="nmt nmb" />
+
+			@{if query.paid === '1'}
+			<div class="contentbody">
+				<div>
+					<div class="value"><a class="b" href="./">@(Click here)</a> @(for the order details.)</div>
+				</div>
+			</div>
+			@{fi}
+
+			@{if query.paid !== '1'}
+			<div class="contentbody">
+				<div class="keyvalue">
+					<div class="key">@(Customer)</div>
+					<div class="value">@{model.firstname} @{model.lastname}</div>
+				</div>
+
+				@{if model.iscompany}
+				<div class="keyvalue">
+					<div class="key">@(Company)</div>
+					<div class="value">@{model.company}</div>
+					<div class="value silver fs12" style="margin-top:5px">@{model.companyid}<br />@{model.companyvat}</div>
+				</div>
+				@{fi}
+
+				<div class="keyvalue">
+					<div class="key">@(Email address)</div>
+					<div class="value">@{model.email}</div>
+				</div>
+
+				@{if model.note}
+				<div class="keyvalue">
+					<div class="key">@(Note)</div>
+					<div class="value">@{model.note}</div>
+				</div>
+				@{fi}
+
+			</div>
+			@{fi}
+		</div>
+		<br />
+		@{if query.paid !== '1'}
+		<div style="padding:10px">
+			<div class="row">
+				<div class="col-md-6 m">
+					<div class="keyvalue">
+						<div class="key">@(Price)</div>
+						<div class="value">@{!model.price.currency()}</div>
+					</div>
+				</div>
+				<div class="col-md-6 m">
+					<div class="keyvalue">
+						<div class="key">@(Shipping)</div>
+						<div class="value">@{!model.shipping.currency()}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		@{fi}
+	</div>
+	@{if query.paid !== '1'}
+	<div class="col-md-6">
+		<div class="content">
+			<div class="contentbody">
+				<div class="keyvalue m">
+					<div class="key"><i class="fa fa-address-book"></i>@(Delivery address)</div>
+					<div class="value">@{model.billingstreet}<br />@{model.billingzip}<br />@{model.billingcity}<br />@{model.billingcountry}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@{fi}
+</div>
+@{if query.paid !== '1'}
+<br />
+<h2>@(Ordered items)</h2>
+<table class="table table-bordered bg-white">
+	<thead>
+		<tr>
+			<th>@(Product name)</th>
+			<th class="ui-center col-xs-1">@(Count)</th>
+			<th class="ui-right col-sm-3 col-xs-4">@(Price)</th>
+		</tr>
+	</thead>
+	<tbody class="orderedproducts">
+		@{foreach m in model.items}
+		<tr>
+			<td>@{m.name}</td>
+			<td class="ui-center col-xs-1">@{m.count}</td>
+			<td class="ui-right col-sm-3 col-xs-4">@{!(m.count * m.price).currency()}</td>
+		</tr>
+		@{end}
+	</tbody>
+	<tfoot>
+		<tr class="bg-yellow">
+			<td class="b">@(Summarize)</td>
+			<td class="b ui-center">@{model.count}</td>
+			<td class="b ui-right red">@{!model.price.currency()}</td>
+		</tr>
+	</tfoot>
+</table>
+@{fi}
