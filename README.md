@@ -1,6 +1,6 @@
 [![MIT License][license-image]][license-url]
 
-# Ivan's Herbs Free Trial
+# Ivan's Herbs Giveaway Shop
 
 - Built with [__Total.js Eshop__](https://wiki.totaljs.com?q=eshop+welcome) `v11.0.0` (requires __Total.js__ `+v2.9.2`)
 
@@ -15,18 +15,21 @@ cd eshop
 ```
 
 - install the Node.js dependencies
+
 ```bash
 npm install
 ```
 
 - restore the latest database backup from S3
+
 ```bash
 TODO
+```
+
+- run the shop on a particulat port in `debug` or `release` mode. For a debug version listening on port 8001, run
 
 ```
-:x
-```
-node debug.js 8000
+node debug.js 8001
 ```
 
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
